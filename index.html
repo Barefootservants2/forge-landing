@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORGE v2.1 | AI Prompt Engineering by Ashes2Echoes</title>
+    <meta name="description" content="FORGE transforms ordinary AI prompts into institutional-grade queries. Powered by METATRON v7.2 — Claim Registry, Evidence Ledger, 11 Quality Gates, 50 Drift Indicators.">
+    <meta name="keywords" content="AI, prompt engineering, METATRON, FORGE, research protocol, claim verification">
+    
+    <meta property="og:title" content="FORGE v2.1 | AI Prompt Engineering">
+    <meta property="og:description" content="Transform ordinary AI prompts into institutional-grade queries. 11 gates. 50 drift indicators. Evidence-backed outputs.">
+    <meta property="og:type" content="website">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --forge-teal: #40E0D0;
+            --forge-teal-dim: rgba(64, 224, 208, 0.3);
+            --forge-teal-glow: rgba(64, 224, 208, 0.5);
+            --gold: #D4AF37;
+            --gold-dim: rgba(212, 175, 55, 0.3);
+            --void-black: #0a0a0f;
+            --panel-bg: rgba(15, 15, 25, 0.92);
+            --panel-border: rgba(64, 224, 208, 0.25);
+            --text-primary: #e8e8e8;
+            --text-secondary: rgba(232, 232, 232, 0.7);
+            --text-muted: rgba(232, 232, 232, 0.5);
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --error: #f87171;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--void-black);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .bg-matrix {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(64, 224, 208, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 50%),
+                linear-gradient(180deg, var(--void-black) 0%, #0f0f1a 100%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--panel-border);
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo-icon { font-size: 1.5rem; }
+        .nav-logo-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--forge-teal);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--forge-teal); }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--forge-teal-dim);
+            border: 1px solid var(--forge-teal);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--forge-teal);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span { color: var(--forge-teal); }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            min-width: 100px;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--forge-teal);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--forge-teal);
+            color: var(--void-black);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #5ce6d6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--forge-teal-dim);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--forge-teal);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid var(--forge-teal);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: var(--forge-teal-dim);
+        }
+
+        .demo-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .demo-header {
+            background: rgba(64, 224, 208, 0.1);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-dot.red { background: #f87171; }
+        .demo-dot.yellow { background: #fbbf24; }
+        .demo-dot.green { background: #4ade80; }
+
+        .demo-title {
+            margin-left: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .demo-content {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .demo-line {
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .demo-label { color: var(--forge-teal); min-width: 60px; }
+        .demo-text { color: var(--text-secondary); }
+
+        .demo-score {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--panel-border);
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--forge-teal), var(--success));
+            width: 92%;
+            border-radius: 4px;
+        }
+
+        .score-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .collapsible-section {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .section-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            color: var(--forge-teal);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .section-toggle:hover {
+            background: var(--forge-teal-dim);
+            border-color: var(--forge-teal);
+        }
+
+        .section-toggle .icon {
+            transition: transform 0.3s;
+        }
+
+        .section-toggle.expanded .icon {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .section-content.expanded {
+            max-height: 3000px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--gold-dim);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .new-features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .new-feature-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .new-feature-card:hover {
+            border-color: var(--forge-teal);
+            transform: translateY(-4px);
+        }
+
+        .new-feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+        .new-feature-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--forge-teal);
+        }
+
+        .new-feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .new-badge {
+            display: inline-block;
+            background: var(--success);
+            color: var(--void-black);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            background: var(--forge-teal-dim);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .feature-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-tagline {
+            font-size: 0.9rem;
+            color: var(--forge-teal);
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .gates-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .gate-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .gate-card:hover { border-color: var(--forge-teal); }
+
+        .gate-card.upgraded {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .gate-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--forge-teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .gate-card.upgraded .gate-number { color: var(--gold); }
+
+        .gate-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .gate-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .gate-upgraded-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--void-black);
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .comparison-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .comparison-card.forge {
+            border-color: var(--forge-teal);
+            background: rgba(64, 224, 208, 0.05);
+        }
+
+        .comparison-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .comparison-card.forge .comparison-header { color: var(--forge-teal); }
+
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .comparison-label { color: var(--text-secondary); }
+        .comparison-value { font-weight: 600; }
+        .comparison-value.good { color: var(--success); }
+        .comparison-value.bad { color: var(--error); }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--forge-teal);
+            position: relative;
+        }
+
+        .pricing-card.featured::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--forge-teal);
+            color: var(--void-black);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 1rem;
+            border-radius: 100px;
+        }
+
+        .pricing-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--forge-teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+
+        .cta {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .cta-box {
+            background: var(--panel-bg);
+            border: 1px solid var(--forge-teal);
+            border-radius: 16px;
+            padding: 4rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .cta-input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .cta-input:focus {
+            outline: none;
+            border-color: var(--forge-teal);
+        }
+
+        .disclaimer {
+            background: rgba(248, 113, 113, 0.1);
+            border: 2px solid var(--error);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .disclaimer-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--error);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .disclaimer-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--panel-border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--forge-teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover { color: var(--forge-teal); }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--panel-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-legal a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .footer-legal a:hover { color: var(--forge-teal); }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: var(--void-black);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content { grid-template-columns: 1fr; }
+            .demo-panel { display: none; }
+            .new-features-grid { grid-template-columns: 1fr; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .gates-grid { grid-template-columns: repeat(2, 1fr); }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .hero-stats { flex-wrap: wrap; }
+            .nav-links { display: none; }
+            .cta-form { flex-direction: column; }
+            .gates-grid { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .footer-legal { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-matrix"></div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="/" class="nav-logo">
+                <span class="nav-logo-icon">⚒️</span>
+                <span class="nav-logo-text">FORGE</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#gates">11 Gates</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="https://github.com/Barefootservants2/forge-landing" target="_blank">Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        <span>🔱</span>
+                        <span>Powered by METATRON v7.2</span>
+                    </div>
+                    <h1 class="hero-title">Stop Prompting.<br><span>Start Engineering.</span></h1>
+                    <p class="hero-subtitle">
+                        FORGE transforms ordinary AI prompts into institutional-grade queries. 
+                        Claim Registry. Evidence Ledger. 11 Quality Gates. 50 Drift Indicators.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">11</div>
+                            <div class="stat-label">Gates</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">50</div>
+                            <div class="stat-label">Drift Indicators</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">95%+</div>
+                            <div class="stat-label">Accuracy KPI</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">60+</div>
+                            <div class="stat-label">Sources</div>
+                        </div>
+                    </div>
+                    <div class="hero-cta">
+                        <a href="#cta" class="btn-primary">Get Early Access</a>
+                        <a href="#features" class="btn-secondary">See Features</a>
+                    </div>
+                </div>
+
+                <div class="demo-panel">
+                    <div class="demo-header">
+                        <span class="demo-dot red"></span>
+                        <span class="demo-dot yellow"></span>
+                        <span class="demo-dot green"></span>
+                        <span class="demo-title">FORGE v2.1 — CREATE Coaching</span>
+                    </div>
+                    <div class="demo-content">
+                        <div class="demo-line">
+                            <span class="demo-label">USER:</span>
+                            <span class="demo-text">"Analyze NVDA"</span>
+                        </div>
+                        <div class="demo-line">
+                            <span class="demo-label">FORGE:</span>
+                            <span class="demo-text">[23%] Timeframe? Risk tolerance?</span>
+                        </div>
+                        <div class="demo-line">
+                            <span class="demo-label">USER:</span>
+                            <span class="demo-text">"3-month swing, moderate risk"</span>
+                        </div>
+                        <div class="demo-line">
+                            <span class="demo-label">FORGE:</span>
+                            <span class="demo-text">[62%] Entry/exit levels? Sources?</span>
+                        </div>
+                        <div class="demo-line">
+                            <span class="demo-label">USER:</span>
+                            <span class="demo-text">"Yes. 60 sources minimum"</span>
+                        </div>
+                        <div class="demo-line">
+                            <span class="demo-label">FORGE:</span>
+                            <span class="demo-text">✓ Executing with Claim Registry...</span>
+                        </div>
+                        <div class="demo-score">
+                            <span style="color: var(--text-muted);">CREATE Score:</span>
+                            <div class="score-bar"><div class="score-fill"></div></div>
+                            <span class="score-value">92%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DISCLAIMER -->
+    <section class="container">
+        <div class="disclaimer">
+            <div class="disclaimer-title">
+                <span>⚠️</span>
+                <span>IMPORTANT DISCLAIMER</span>
+            </div>
+            <p class="disclaimer-text">
+                FORGE is a prompt engineering tool designed to improve AI interaction quality. It does NOT provide financial, legal, medical, or professional advice. All outputs from FORGE-enhanced prompts should be independently verified. FORGE methodology (CREATE/CAKE frameworks, Authority Scoring) improves prompt quality but does not guarantee accuracy of AI responses. Users are responsible for all decisions made based on AI outputs. For financial decisions, consult a licensed financial advisor. For legal matters, consult a licensed attorney. For medical questions, consult a healthcare professional. Past performance of methodology does not guarantee future results. Use at your own risk.
+            </p>
+        </div>
+    </section>
+
+    <!-- WHAT'S NEW -->
+    <section class="collapsible-section" id="whats-new">
+        <div class="container">
+            <div class="section-header" onclick="toggleSection('whats-new-content', this)">
+                <div>
+                    <div class="section-badge">◆ NEW IN v7.2 ◆</div>
+                    <h2 class="section-title">What's New</h2>
+                    <p class="section-subtitle">
+                        METATRON v7.2 adds verification infrastructure. Not just methodology — proof.
+                    </p>
+                </div>
+                <button class="section-toggle">
+                    <span>View Details</span>
+                    <span class="icon">▼</span>
+                </button>
+            </div>
+
+            <div class="section-content" id="whats-new-content">
+                <div class="new-features-grid">
+                    <div class="new-feature-card">
+                        <div class="new-feature-icon">📋</div>
+                        <div class="new-feature-title">Claim Registry <span class="new-badge">NEW</span></div>
+                        <p class="new-feature-desc">
+                            Every output decomposes to atomic claims. FACT-Static, FACT-Dynamic, 
+                            MEASUREMENT, CAUSAL, FORECAST, INTERPRETATION. Each tagged, tracked, verified.
+                        </p>
+                    </div>
+
+                    <div class="new-feature-card">
+                        <div class="new-feature-icon">📜</div>
+                        <div class="new-feature-title">Evidence Ledger <span class="new-badge">NEW</span></div>
+                        <p class="new-feature-desc">
+                            ALCOA+ compliant audit trail. Every claim linked to evidence with 
+                            URL, timestamp, SHA256 hash. Legal-grade defensibility.
+                        </p>
+                    </div>
+
+                    <div class="new-feature-card">
+                        <div class="new-feature-icon">🔒</div>
+                        <div class="new-feature-title">Security Gate <span class="new-badge">NEW</span></div>
+                        <p class="new-feature-desc">
+                            RAG injection protection. Scans retrieved content for manipulation 
+                            patterns. Domain validation. Citation-content matching.
+                        </p>
+                    </div>
+
+                    <div class="new-feature-card">
+                        <div class="new-feature-icon">🎯</div>
+                        <div class="new-feature-title">Independence Score <span class="new-badge">NEW</span></div>
+                        <p class="new-feature-desc">
+                            "60 sources" means nothing if they copy each other. Now tracks 
+                            unique primaries vs echoes. Minimum 30% independence required.
+                        </p>
+                    </div>
+
+                    <div class="new-feature-card">
+                        <div class="new-feature-icon">⚖️</div>
+                        <div class="new-feature-title">RAZIEL Adjudication <span class="new-badge">NEW</span></div>
+                        <p class="new-feature-desc">
+                            When AI agents disagree, structured resolution. Factual, Interpretive, 
+                            Methodological conflicts. "Higher AS wins" deprecated.
+                        </p>
+                    </div>
+
+                    <div class="new-feature-card">
+                        <div class="new-feature-icon">📊</div>
+                        <div class="new-feature-title">50 Drift Indicators <span class="new-badge">+5</span></div>
+                        <p class="new-feature-desc">
+                            Security/Integrity drift now tracked: injection misses, domain bypass, 
+                            citation mismatch, provenance failures, ledger completeness.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="collapsible-section" id="features">
+        <div class="container">
+            <div class="section-header" onclick="toggleSection('features-content', this)">
+                <div>
+                    <div class="section-badge">◆ CORE CAPABILITIES ◆</div>
+                    <h2 class="section-title">What FORGE Does</h2>
+                    <p class="section-subtitle">
+                        Real-time prompt coaching powered by METATRON v7.2 institutional protocols.
+                    </p>
+                </div>
+                <button class="section-toggle">
+                    <span>View Details</span>
+                    <span class="icon">▼</span>
+                </button>
+            </div>
+
+            <div class="section-content" id="features-content">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">📊</div>
+                            <div>
+                                <div class="feature-title">Real-Time CREATE Scoring</div>
+                                <div class="feature-tagline">85% threshold enforced</div>
+                            </div>
+                        </div>
+                        <p class="feature-desc">
+                            Every prompt scored across 6 dimensions as you type. FORGE coaches 
+                            you toward completion before execution.
+                        </p>
+                        <ul class="feature-list">
+                            <li><strong>C</strong>ontext — Background, constraints, domain</li>
+                            <li><strong>R</strong>easoning — Logic chain, methodology</li>
+                            <li><strong>E</strong>vidence — Source requirements, authority</li>
+                            <li><strong>A</strong>ction — Output format, deliverables</li>
+                            <li><strong>T</strong>esting — Success criteria</li>
+                            <li><strong>E</strong>nhancement — Iteration triggers</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">✅</div>
+                            <div>
+                                <div class="feature-title">CAKE Output Standards</div>
+                                <div class="feature-tagline">4 quality pillars</div>
+                            </div>
+                        </div>
+                        <p class="feature-desc">
+                            Every response validated against output quality standards before delivery.
+                        </p>
+                        <ul class="feature-list">
+                            <li><strong>C</strong>larity — Unambiguous, structured</li>
+                            <li><strong>A</strong>ccuracy — Verified, confidence stated</li>
+                            <li><strong>K</strong>indness — Acknowledges uncertainty</li>
+                            <li><strong>E</strong>fficiency — Concise, complete</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">🔍</div>
+                            <div>
+                                <div class="feature-title">Source Authority Scoring</div>
+                                <div class="feature-tagline">AS = (PT × RW × EM × RS) / BF</div>
+                            </div>
+                        </div>
+                        <p class="feature-desc">
+                            Not just "sources cited" — quantified credibility for every source.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Publication Tier (SEC=5.0, WSJ=3.0, Reddit=1.0)</li>
+                            <li>Recency Weight (domain-specific decay)</li>
+                            <li>Expertise Match (source ↔ claim)</li>
+                            <li>Review Status (peer-reviewed vs. blog)</li>
+                            <li>Bias Factor (conflicts penalize)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon">🎓</div>
+                            <div>
+                                <div class="feature-title">Teaching Mode</div>
+                                <div class="feature-tagline">Learn or stay subscribed</div>
+                            </div>
+                        </div>
+                        <p class="feature-desc">
+                            FORGE teaches you the methodology. Become an expert or keep using us.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Gap explanation — Why score is low</li>
+                            <li>Point values — What each element adds</li>
+                            <li>Example improvements — Concrete suggestions</li>
+                            <li>Methodology links — Reference docs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GATES -->
+    <section class="collapsible-section" id="gates">
+        <div class="container">
+            <div class="section-header" onclick="toggleSection('gates-content', this)">
+                <div>
+                    <div class="section-badge">◆ QUALITY ENFORCEMENT ◆</div>
+                    <h2 class="section-title">11 Mandatory Gates</h2>
+                    <p class="section-subtitle">
+                        Every output passes all gates or doesn't ship. 6 gates upgraded in v7.2.
+                    </p>
+                </div>
+                <button class="section-toggle">
+                    <span>View Details</span>
+                    <span class="icon">▼</span>
+                </button>
+            </div>
+
+            <div class="section-content" id="gates-content">
+                <div class="gates-grid">
+                    <div class="gate-card">
+                        <div class="gate-number">0</div>
+                        <div class="gate-name">Self-Verification</div>
+                        <div class="gate-desc">No unverifiable claims</div>
+                    </div>
+
+                    <div class="gate-card upgraded">
+                        <div class="gate-number">1</div>
+                        <div class="gate-name">RAG</div>
+                        <div class="gate-desc">All FACT claims verified</div>
+                        <div class="gate-upgraded-badge">UPGRADED</div>
+                    </div>
+
+                    <div class="gate-card">
+                        <div class="gate-number">2</div>
+                        <div class="gate-name">Authority</div>
+                        <div class="gate-desc">AS ≥ 2.0 all sources</div>
+                    </div>
+
+                    <div class="gate-card upgraded">
+                        <div class="gate-number">3</div>
+                        <div class="gate-name">Chain</div>
+                        <div class="gate-desc">No broken chains</div>
+                        <div class="gate-upgraded-badge">UPGRADED</div>
+                    </div>
+
+                    <div class="gate-card upgraded">
+                        <div class="gate-number">4</div>
+                        <div class="gate-name">Schema</div>
+                        <div class="gate-desc">Claim Registry complete</div>
+                        <div class="gate-upgraded-badge">UPGRADED</div>
+                    </div>
+
+                    <div class="gate-card">
+                        <div class="gate-number">5</div>
+                        <div class="gate-name">Gap</div>
+                        <div class="gate-desc">Gaps documented</div>
+                    </div>
+
+                    <div class="gate-card upgraded">
+                        <div class="gate-number">6</div>
+                        <div class="gate-name">Consensus</div>
+                        <div class="gate-desc">≥3 unique primaries</div>
+                        <div class="gate-upgraded-badge">UPGRADED</div>
+                    </div>
+
+                    <div class="gate-card">
+                        <div class="gate-number">7</div>
+                        <div class="gate-name">Confidence</div>
+                        <div class="gate-desc">Claim-level intervals</div>
+                    </div>
+
+                    <div class="gate-card upgraded">
+                        <div class="gate-number">8</div>
+                        <div class="gate-name">Methodology</div>
+                        <div class="gate-desc">Evidence ledger + hashes</div>
+                        <div class="gate-upgraded-badge">UPGRADED</div>
+                    </div>
+
+                    <div class="gate-card upgraded">
+                        <div class="gate-number">9</div>
+                        <div class="gate-name">Security</div>
+                        <div class="gate-desc">Injection scan passed</div>
+                        <div class="gate-upgraded-badge">NEW</div>
+                    </div>
+
+                    <div class="gate-card">
+                        <div class="gate-number">10</div>
+                        <div class="gate-name">Agent Sync</div>
+                        <div class="gate-desc">All agents merged</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section class="collapsible-section" id="comparison">
+        <div class="container">
+            <div class="section-header" onclick="toggleSection('comparison-content', this)">
+                <div>
+                    <div class="section-badge">◆ THE DIFFERENCE ◆</div>
+                    <h2 class="section-title">Standard AI vs FORGE</h2>
+                    <p class="section-subtitle">
+                        Every AI tool gives you raw output. FORGE gives you verified intelligence.
+                    </p>
+                </div>
+                <button class="section-toggle">
+                    <span>View Details</span>
+                    <span class="icon">▼</span>
+                </button>
+            </div>
+
+            <div class="section-content" id="comparison-content">
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <div class="comparison-header">Standard AI (ChatGPT, Claude, etc.)</div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Quality Gates</span>
+                            <span class="comparison-value bad">0</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Drift Monitoring</span>
+                            <span class="comparison-value bad">None</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Claim Verification</span>
+                            <span class="comparison-value bad">None</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Source Authority</span>
+                            <span class="comparison-value bad">"Sources say"</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Evidence Trail</span>
+                            <span class="comparison-value bad">None</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Prompt Coaching</span>
+                            <span class="comparison-value bad">None</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Security Scanning</span>
+                            <span class="comparison-value bad">None</span>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card forge">
+                        <div class="comparison-header">FORGE (METATRON v7.2)</div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Quality Gates</span>
+                            <span class="comparison-value good">11 Mandatory</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Drift Monitoring</span>
+                            <span class="comparison-value good">50 Indicators</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Claim Verification</span>
+                            <span class="comparison-value good">Atomic Registry</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Source Authority</span>
+                            <span class="comparison-value good">AS Formula + Scores</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Evidence Trail</span>
+                            <span class="comparison-value good">ALCOA+ Ledger</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Prompt Coaching</span>
+                            <span class="comparison-value good">Real-time CREATE</span>
+                        </div>
+                        <div class="comparison-item">
+                            <span class="comparison-label">Security Scanning</span>
+                            <span class="comparison-value good">Injection Protection</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="collapsible-section" id="pricing">
+        <div class="container">
+            <div class="section-header" onclick="toggleSection('pricing-content', this)">
+                <div>
+                    <div class="section-badge">◆ PRICING ◆</div>
+                    <h2 class="section-title">Choose Your Plan</h2>
+                    <p class="section-subtitle">
+                        All plans include full METATRON v7.2 protocol. No feature restrictions.
+                    </p>
+                </div>
+                <button class="section-toggle">
+                    <span>View Pricing</span>
+                    <span class="icon">▼</span>
+                </button>
+            </div>
+
+            <div class="section-content" id="pricing-content">
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-name">Trial</div>
+                        <div class="pricing-price">$0</div>
+                        <div class="pricing-period">3 days or 20 queries</div>
+                        <ul class="pricing-features">
+                            <li>Full METATRON v7.2 access</li>
+                            <li>All 11 quality gates</li>
+                            <li>CREATE coaching active</li>
+                            <li>Teaching mode visible</li>
+                            <li>Evidence ledger access</li>
+                        </ul>
+                        <a href="#cta" class="btn-secondary" style="width: 100%;">Start Trial</a>
+                    </div>
+
+                    <div class="pricing-card featured">
+                        <div class="pricing-name">Standard</div>
+                        <div class="pricing-price">$29</div>
+                        <div class="pricing-period">per month</div>
+                        <ul class="pricing-features">
+                            <li>Everything in Trial</li>
+                            <li>Unlimited queries</li>
+                            <li>Priority execution</li>
+                            <li>Claim Registry export</li>
+                            <li>Email support</li>
+                        </ul>
+                        <a href="#cta" class="btn-primary" style="width: 100%;">Get Started</a>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="pricing-name">Professional</div>
+                        <div class="pricing-price">$99</div>
+                        <div class="pricing-period">per month</div>
+                        <ul class="pricing-features">
+                            <li>Everything in Standard</li>
+                            <li>API access</li>
+                            <li>Custom domain modules</li>
+                            <li>Evidence ledger export</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <a href="#cta" class="btn-secondary" style="width: 100%;">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+        <div class="container">
+            <div class="cta-box">
+                <div class="cta-title">Get Early Access</div>
+                <p class="cta-desc">
+                    Join the waitlist for FORGE v2.1. 3-day trial for all early signups.
+                </p>
+                <form class="cta-form" id="waitlistForm">
+                    <input type="email" class="cta-input" placeholder="Enter your email" required id="emailInput">
+                    <button type="submit" class="btn-primary">Join Waitlist</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">🔱 FORGE by Ashes2Echoes</div>
+                    <p class="footer-tagline">Stop prompting. Start engineering.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/Barefootservants2/forge-landing" target="_blank">Documentation</a>
+                    <a href="#cta">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <a href="/terms.html">Terms of Service</a>
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/aup.html">Acceptable Use</a>
+                </div>
+                <p class="footer-copy">
+                    © 2026 Ashes2Echoes, LLC. All rights reserved. METATRON™ and FORGE™ are trademarks of Ashes2Echoes, LLC.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast">✓ You're on the list! We'll be in touch.</div>
+
+    <script>
+        function toggleSection(contentId, headerElement) {
+            const content = document.getElementById(contentId);
+            const toggle = headerElement.querySelector('.section-toggle');
+            
+            content.classList.toggle('expanded');
+            toggle.classList.toggle('expanded');
+            
+            if (content.classList.contains('expanded')) {
+                toggle.querySelector('span:first-child').textContent = 'Hide Details';
+            } else {
+                toggle.querySelector('span:first-child').textContent = contentId.includes('pricing') ? 'View Pricing' : 'View Details';
+            }
+        }
+
+        document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            if (email) {
+                document.getElementById('toast').classList.add('show');
+                setTimeout(() => document.getElementById('toast').classList.remove('show'), 3000);
+                this.reset();
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
